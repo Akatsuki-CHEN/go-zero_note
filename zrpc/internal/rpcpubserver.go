@@ -16,9 +16,11 @@ const (
 // NewRpcPubServer returns a Server.
 func NewRpcPubServer(etcd discov.EtcdConf, listenOn string,
 	opts ...ServerOption) (Server, error) {
+
 	registerEtcd := func() error {
 		pubListenOn := figureOutListenOn(listenOn)
 		var pubOpts []discov.PubOption
+
 		if etcd.HasAccount() {
 			pubOpts = append(pubOpts, discov.WithPubEtcdAccount(etcd.User, etcd.Pass))
 		}
@@ -29,9 +31,12 @@ func NewRpcPubServer(etcd discov.EtcdConf, listenOn string,
 		if etcd.HasID() {
 			pubOpts = append(pubOpts, discov.WithId(etcd.ID))
 		}
+
 		pubClient := discov.NewPublisher(etcd.Hosts, etcd.Key, pubListenOn, pubOpts...)
+
 		return pubClient.KeepAlive()
 	}
+
 	server := keepAliveServer{
 		registerEtcd: registerEtcd,
 		Server:       NewRpcServer(listenOn, opts...),
@@ -46,6 +51,7 @@ type keepAliveServer struct {
 }
 
 func (s keepAliveServer) Start(fn RegisterFn) error {
+	// 注册etcd
 	if err := s.registerEtcd(); err != nil {
 		return err
 	}

@@ -63,6 +63,7 @@ func (p *Publisher) KeepAlive() error {
 		p.Stop()
 	})
 
+	// 定期刷新租约
 	return p.keepAliveAsync(cli)
 }
 
@@ -114,6 +115,7 @@ func (p *Publisher) doRegister() (internal.EtcdClient, error) {
 		return nil, err
 	}
 
+	// 注册key-value
 	p.lease, err = p.register(cli)
 	return cli, err
 }
@@ -169,6 +171,8 @@ func (p *Publisher) register(client internal.EtcdClient) (clientv3.LeaseID, erro
 	} else {
 		p.fullKey = makeEtcdKey(p.key, int64(lease))
 	}
+
+	// 向etcd申请租约
 	_, err = client.Put(client.Ctx(), p.fullKey, p.value, clientv3.WithLease(lease))
 
 	return lease, err

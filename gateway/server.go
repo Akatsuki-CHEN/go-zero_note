@@ -42,6 +42,8 @@ type (
 
 // MustNewServer creates a new gateway server.
 func MustNewServer(c GatewayConf, opts ...Option) *Server {
+	fmt.Println("【go-zero】MustNewServer start")
+
 	svr := &Server{
 		upstreams: c.Upstreams,
 		Server:    rest.MustNewServer(c.RestConf),
