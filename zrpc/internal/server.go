@@ -24,11 +24,15 @@ type (
 	}
 
 	baseRpcServer struct {
-		address            string
-		health             *health.Server
-		options            []grpc.ServerOption
+		address string
+		// gRPC 官方提供的健康检查服务
+		health *health.Server
+		//gRPC 选项
+		options []grpc.ServerOption
+		// 流式 RPC 调用的拦截器
 		streamInterceptors []grpc.StreamServerInterceptor
-		unaryInterceptors  []grpc.UnaryServerInterceptor
+		// 一般的RPC调用的拦截器
+		unaryInterceptors []grpc.UnaryServerInterceptor
 	}
 )
 

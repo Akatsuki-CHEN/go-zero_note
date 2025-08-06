@@ -16,12 +16,16 @@ type (
 	// Probe represents readiness status of a given component.
 	Probe interface {
 		// MarkReady sets a ready state for the endpoint handlers.
+		// 将组件标记为就绪状态，说明正常
 		MarkReady()
 		// MarkNotReady sets a not ready state for the endpoint handlers.
+		// 将组件标记为未就绪状态
 		MarkNotReady()
 		// IsReady return inner state for the component.
+		// 检查组件当前是否处于就绪状态
 		IsReady() bool
 		// Name return probe name identifier
+		// 返回探针的名称标识符
 		Name() string
 	}
 
